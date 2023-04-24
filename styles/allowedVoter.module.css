@@ -3,23 +3,25 @@
     margin: 0 auto;
     margin-block: 2rem;
     display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-columns: 2fr 3fr 0.5fr;;
     gap: 2rem;
+    color: white;
 }
 .voter{
     
-    background-color: #231E39;
+    background-color: #F4D1AE;
     border-radius: 25px;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
-    color: #B3B8CD;
+    color: #000000;
     padding: 2rem;
 }
 
 
 .voter__container__box{
     text-align: center;
-    border: 1px dotted #9a02ac;
+    border: 1px dotted #aecdaf;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .voter__container__box p{
@@ -35,14 +37,12 @@
 
 /* ////////button */
 
-.Button{
-    text-align: end;
-}
+
 
 /* //////////////////////////////RESISTER */
 
 .register{
-    background-color: #231E39;
+    background-color: #F4D1AE;
     padding: 1rem;
     border-radius: .5rem;
     display: grid;
@@ -50,7 +50,7 @@
 }
 
 .Candidate{
-    background-color: #9a02ac;
+    background-color: #aecdaf;
     padding: .5rem;
     border-radius: .2rem;
     cursor: pointer;
@@ -76,10 +76,10 @@
     width: 15rem;
     height: 15rem;
     padding: 1rem;
-    background-color: #231E39;
+    background-color: #F4D1AE;
     border-radius: 25px;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
-    color: #B3B8CD;
+    color: #000000;
     text-align: start;
 }
 
@@ -90,10 +90,10 @@
 }
 
 .voterInfo_paragraph{
-    background-color: #231E39;
+    background-color: #F4D1AE;
     border-radius: 25px;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
-    color: #B3B8CD;
+    color: #000000;
     height: 9rem;
     padding: 1rem;
 }
@@ -108,20 +108,23 @@
 /* //////////////////// */
 
 .sideInfo{
-    background-color: #231E39;
+    background-color: #F4D1AE;
     padding: .5rem 1rem;
     border-radius: 1rem;
-    color: #B3B8CD;
+    color: #000000;
 }
 .sideInfo_box h4{
-    background-color: #9a02ac;
+    background-color: #aecdaf;
     padding: .5rem;
     border-radius: .2rem;
 }
 .sideInfo_box .sideInfo_para{
-    background-color: #9a02ac;
+    background-color: #aecdaf;
     padding: .5rem;
     border-radius: .2rem;
+    font-size: 24px;
+    font-weight: 800;
+    color: #47004f;
 }
 .car{
     display: grid;
@@ -131,7 +134,7 @@
 
 .card_box{
     line-height: 1;
-    border: 1px solid #9a02ac;
+    border: 1px solid #aecdaf;
     padding: .2rem;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
     border-radius: .3rem;
@@ -144,10 +147,10 @@
 /* ////////////////////////////USER LIST */
 
 .createdVorter__info{
-    background-color: #231E39;
+    background-color: #F4D1AE;
     border-radius: 25px;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
-    color: #B3B8CD;
+    color: #000000;
     padding: 2rem;
     
 }

@@ -7,9 +7,9 @@
 }
 
 .card_box{
-    background-color: #231E39;
+    background-color: #8b8b8b;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
-    color: #B3B8CD;
+    color: #000000;
     text-align: center;
     overflow: hidden;
     border-radius: .5rem;
@@ -25,16 +25,16 @@
 }
 
 .card_vote{
-    color: #9a02ac;
+    color: black;
 }
 
 .total{
-    background-color: #9a02ac;
+    background-color: #c9be61;
     padding: .5rem;
     border-radius: .2rem;
     font-weight: 900;
     letter-spacing: 1;
-    color: #fff;
+    color: black;
     text-transform: uppercase;
 }
 
@@ -48,14 +48,14 @@
 }
 
 .card_button button{
-    background-color: #9a02ac;
+    background-color: #aecdaf;
     box-shadow: 10px 10px 15px rgba(0,0,0,0.35);
     border: none;
     outline: none;
     padding: .5rem 1rem;
     font-size: 1rem;
     font-weight: 500;
-    color: #fff;
+    color: black;
     border-radius: .2rem;
     cursor: pointer;
 }

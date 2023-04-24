@@ -11,8 +11,23 @@
     gap: 2rem;
 }
 
+.winnerButton{
+    background-color: #7f7a58;
+    color: white;
+    border-radius: 11px;
+    padding: 1rem;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.winnerText{
+    font-weight: 800;
+    font-size: 24px;
+    color: white;
+}
+
 .winner_info{
-    background-color: #231E39;
+    background-color: #8b8b8b;
     padding: 1rem;
     border-radius: .2rem;
 
@@ -24,11 +39,11 @@
 
 
 .winner_message{
-    background-color: #231E39;
+    background-color: #F4D1AE;
     padding: 2rem;
     border-radius: .2rem;
     font-size: 1.5rem;
-    color: #B3B8CD;
+    color: #000000;
     line-height: 0;
     position: relative;
 }
@@ -44,7 +59,7 @@
 
 
 .candidate_list{
-    background-color: #9a02ac;
+    background-color: #aecdaf;
     font-size: 1rem;
     padding: .1rem 1rem;
 }
@@ -53,10 +68,10 @@
     font-weight: 600;
 }
 .candidate_list span{
-    background-color: #231E39;
+    background-color: #F4D1AE;
     padding: .5rem;
     margin-left: .5rem;
-    color: #B3B8CD;
+    color: #000000;
     border-radius: .2rem;
 }
 

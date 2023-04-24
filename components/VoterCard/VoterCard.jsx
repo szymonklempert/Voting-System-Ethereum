@@ -21,9 +21,12 @@ const voterCard = ({ voterArray }) => {
             <p>
               Over the years, I have acquired relevant skills and experience.
             </p>
-            <p className={voterCardStyle.vote_Status}>
-              {el[6] == true ? "You Already Voted" : "Not Voted"}
-            </p>
+
+            {el[6] == true ? (
+              <p className={voterCardStyle.vote_Status}>You Already Voted</p>
+            ) : (
+              <p className={voterCardStyle.vote_Status_no}> Not Voted</p>
+            )}
           </div>
         </div>
       ))}

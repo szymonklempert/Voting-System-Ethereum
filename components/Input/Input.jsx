@@ -4,7 +4,9 @@ import Style from "./Input.module.css";
 const Input = ({ inputType, title, placeholder, handleClick }) => {
   return (
     <div className={Style.input}>
-      <p>{title}</p>
+      <p style={{ marginRight: "1rem", width: "4rem", fontWeight: "600" }}>
+        {title}
+      </p>
       {inputType == "text" ? (
         <div className={Style.input__box}>
           <input

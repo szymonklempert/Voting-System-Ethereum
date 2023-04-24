@@ -196,7 +196,6 @@ contract Create {
         uint256 _candidateVoteId
     ) external {
         Voter storage voter = voters[msg.sender];
-
         require(!voter.voter_voted, "You have already voted");
         require(voter.voter_allowed != 0, "You have no right to vote");
 
@@ -261,5 +260,10 @@ contract Create {
             }
         }
         return winner;
+    }
+
+    //get organizer
+    function getOrganizerAddress() public view returns (address) {
+        return votingOrganizer;
     }
 }

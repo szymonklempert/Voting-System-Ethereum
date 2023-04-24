@@ -23,6 +23,7 @@ const candidateRegistration = () => {
     setCandidate,
     getNewCandidate,
     candidateArray,
+    organizerAddress,
   } = useContext(VotingContext);
 
   //voters image drop
@@ -50,13 +51,13 @@ const candidateRegistration = () => {
             <img src={fileUrl} alt="Voter Image" />
             <div className={Style.voterInfo_paragraph}>
               <p>
-                Name:<span>&nbps; {candidateForm.name}</span>
+                Name:<span>&nbsp; {candidateForm.name}</span>
               </p>
               <p>
-                Address:<span>&nbps; {candidateForm.address.slice(0, 20)}</span>
+                Address:<span>&nbsp; {candidateForm.address.slice(0, 20)}</span>
               </p>
               <p>
-                age:<span>&nbps; {candidateForm.age}</span>
+                Age:<span>&nbsp; {candidateForm.age}</span>
               </p>
             </div>
           </div>
@@ -65,9 +66,9 @@ const candidateRegistration = () => {
         {!fileUrl && (
           <div className={Style.sideInfo}>
             <div className={Style.sideInfo_box}>
-              <h4>Create candidate for voting</h4>
-              <p>Blockchain voting organization, provide ethereum</p>
-              <p className={Style.sideInfo_para}>Contract Candidate</p>
+              {/* <h4>Create candidate for voting</h4>
+              <p>Blockchain voting organization, provide ethereum</p> */}
+              <p className={Style.sideInfo_para}>All Candidates</p>
 
               <div className={Style.car}>
                 {candidateArray.map((el, i) => (
@@ -77,10 +78,17 @@ const candidateRegistration = () => {
                     </div>
                     <div className={Style.card_info}>
                       <p>
+                        <b>Name: </b>
                         {el[1]} #{el[2].toNumber()}
                       </p>
-                      <p>{el[0]}</p>
-                      <p>Address: {el[6].slice(0, 10)}...</p>
+                      <p>
+                        <b>Age: </b>
+                        {el[0]}
+                      </p>
+                      <p>
+                        <b>Address: </b>
+                        {el[6].slice(0, 10)}...
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -121,24 +129,24 @@ const candidateRegistration = () => {
         <div className={Style.input__container}>
           <Input
             inputType="text"
-            title="Name"
-            placeholder="Voter Name"
+            title="Name: "
+            placeholder="Candidate Name"
             handleClick={(e) =>
               setCandidateForm({ ...candidateForm, name: e.target.value })
             }
           />
           <Input
             inputType="text"
-            title="Address"
-            placeholder="Voter Address"
+            title="Address: "
+            placeholder="Candidate Address"
             handleClick={(e) =>
               setCandidateForm({ ...candidateForm, address: e.target.value })
             }
           />
           <Input
             inputType="text"
-            title="Age"
-            placeholder="Voter Age"
+            title="Age: "
+            placeholder="Candidate Age"
             handleClick={(e) =>
               setCandidateForm({ ...candidateForm, age: e.target.value })
             }
@@ -146,7 +154,7 @@ const candidateRegistration = () => {
 
           <div className={Style.Button}>
             <Button
-              btnName="Authorized Candidate"
+              btnName="Authorize Candidate"
               handleClick={() => setCandidate(candidateForm, fileUrl, router)}
             />
           </div>
@@ -156,11 +164,17 @@ const candidateRegistration = () => {
       <div className={Style.createVoter}>
         <div className={Style.createdVoter__info}>
           <Image src={candidateImage} alt="userProfile" />
-          <p>Notice for user</p>
           <p>
-            Organizer: <span>0xasfi3483..</span>
+            <b>Organizer:</b> <span>{organizerAddress}</span>
           </p>
-          <p>Only organizer of voting contract can create voter for election</p>
+          <p>
+            <b>
+              <u>Notice for user:</u>
+            </b>
+          </p>
+          <pre>
+            Only organizer of voting contract can create voter for election
+          </pre>
         </div>
       </div>
     </div>

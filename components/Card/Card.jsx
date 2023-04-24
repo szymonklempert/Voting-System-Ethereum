@@ -18,7 +18,7 @@ const card = ({ candidateArray, giveVote }) => {
             </h2>
             <p>{el[0]}</p>
             <p>Address: {el[6].slice(0, 30)}..</p>
-            <p className={Style.total}>Total Vote</p>
+            <p className={Style.total}>Total Votes</p>
           </div>
 
           <div className={Style.card_vote}>

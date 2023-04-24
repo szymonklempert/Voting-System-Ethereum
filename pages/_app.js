@@ -2,16 +2,22 @@ import "../styles/globals.css";
 
 import { VotingProvider } from "../context/Voter";
 import Navbar from "../components/NavBar/NavBar";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }) {
   return (
-    <VotingProvider>
-      <div>
-        <Navbar />
+    <>
+      <Head>
+        <title>Online Voting System</title>
+      </Head>
+      <VotingProvider>
         <div>
-          <Component {...pageProps} />
+          <Navbar />
+          <div>
+            <Component {...pageProps} />
+          </div>
         </div>
-      </div>
-    </VotingProvider>
+      </VotingProvider>
+    </>
   );
 }

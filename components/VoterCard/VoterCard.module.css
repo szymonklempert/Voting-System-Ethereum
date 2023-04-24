@@ -1,5 +1,14 @@
 .vote_Status{
-    background-color: #9a02ac;
+    background-color: #aecdaf;
+    padding: .5rem 1rem;
+    font-size: 1.3rem;
+    color: #fff;
+    font-weight: 700;
+    border-radius: .2rem;
+}
+
+.vote_Status_no{
+    background-color: red;
     padding: .5rem 1rem;
     font-size: 1.3rem;
     color: #fff;

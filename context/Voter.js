@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 
 import { VotingAddress, VotingAddressABI } from "./constants";
+import { toast } from "react-toastify";
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(VotingAddress, VotingAddressABI, signerOrProvider);
@@ -18,6 +19,7 @@ export const VotingProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [candidateLength, setCandidateLength] = useState("");
   const [winningAddress, setWinningAddress] = useState("");
+  const [organizerAddress, setOrganizerAddress] = useState("");
   const pushCandidate = [];
   const candidateIndex = [];
   const [candidateArray, setCandidateArray] = useState([]);
@@ -33,18 +35,18 @@ export const VotingProvider = ({ children }) => {
   //connecting wallet metamask
 
   const checkIfWalletIsConnected = async () => {
-    if (!window.ethereum) return setError("Please Install Metamask");
+    if (!window.ethereum) return toast("Please Install Metamask");
 
     const account = await window.ethereum.request({ method: "eth_accounts" });
     if (account.length) {
       setCurrentAccount(account[0]);
     } else {
-      setError("Please Install Metamask and connect and reload");
+      toast("Please Install Metamask and connect and reload");
     }
   };
 
   const connectWallet = async () => {
-    if (!window.ethereum) return setError("Please Install Metamask");
+    if (!window.ethereum) return toast("Please Install Metamask");
     const account = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
@@ -79,7 +81,7 @@ export const VotingProvider = ({ children }) => {
       return url;
     } catch (error) {
       console.log(error);
-      setError("Error uploading file to IPFS");
+      toast("Error uploading file to IPFS");
     }
   };
   const uploadToIPFSCandidate = async (file) => {
@@ -90,15 +92,14 @@ export const VotingProvider = ({ children }) => {
       return url;
     } catch (error) {
       console.log(error);
-      setError("Error uploading file to IPFS");
+      toast("Error uploading file to IPFS");
     }
   };
 
   const createVoter = async (formInput, fileUrl, router) => {
     try {
-      const { name, address, position } = formInput;
-      if (!name || !address || !position)
-        return setError("Input data is missing");
+      const { name, address, age } = formInput;
+      if (!name || !address || !age) return toast("Input data is missing");
 
       //connecting smart contract
       const web3Modal = new Web3Modal();
@@ -109,7 +110,7 @@ export const VotingProvider = ({ children }) => {
       const dataString = JSON.stringify({
         name,
         address,
-        position,
+        age,
         image: fileUrl,
       });
       const formData = new FormData();
@@ -123,7 +124,7 @@ export const VotingProvider = ({ children }) => {
       voter.wait(); //wait until it gets registered in blockchain
       router.push("/voterList");
     } catch (error) {
-      setError("Error in creating voter");
+      toast("Error in creating voter");
     }
   };
 
@@ -149,7 +150,8 @@ export const VotingProvider = ({ children }) => {
       const voterList = await contract.getVoterLength();
       setVoterLength(voterList.toNumber());
     } catch (error) {
-      setError("Couldnot fetch voters data");
+      // setError("Couldnot fetch voters data");
+      toast("Couldnot fetch voters data");
     }
   };
 
@@ -162,10 +164,11 @@ export const VotingProvider = ({ children }) => {
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
       const contract = fetchContract(signer);
-
+      console.log(voterAddress, voterId);
       const voteredList = await contract.vote(voterAddress, voterId);
     } catch (error) {
-      setError("Sorry!, You have already voted, Reload Browser");
+      // setError("Sorry!, You have already voted, Reload Browser");
+      toast("Error!");
     }
   };
 
@@ -173,7 +176,7 @@ export const VotingProvider = ({ children }) => {
   const setCandidate = async (candidateForm, fileUrl, router) => {
     try {
       const { name, address, age } = candidateForm;
-      if (!name || !address || !age) return setError("Input data is missing");
+      if (!name || !address || !age) return toast("Input data is missing");
       //connecting smart contract
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
@@ -203,7 +206,8 @@ export const VotingProvider = ({ children }) => {
       candidate.wait(); //wait until it gets registered in blockchain
       router.push("/");
     } catch (error) {
-      setError("Error in creating candidate");
+      // setError("Error in creating candidate");
+      toast("Error in creating candidate");
     }
   };
 
@@ -252,6 +256,19 @@ export const VotingProvider = ({ children }) => {
     }
   };
 
+  const getOrganizerAddress = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
+
+    const organizerAddress = await contract.getOrganizerAddress();
+    setOrganizerAddress(organizerAddress);
+  };
+
+  getOrganizerAddress();
+
   return (
     <VotingContext.Provider
       value={{
@@ -274,6 +291,7 @@ export const VotingProvider = ({ children }) => {
         uploadToIPFSCandidate,
         findWinner,
         winningAddress,
+        organizerAddress,
       }}
     >
       {children}

@@ -14,12 +14,17 @@ const allowedVoters = () => {
   const [formInput, setFormInput] = useState({
     name: "",
     address: "",
-    position: "",
+    age: "",
   });
 
   const router = useRouter();
-  const { uploadToIPFS, createVoter, voterArray, getAllVoterData } =
-    useContext(VotingContext);
+  const {
+    uploadToIPFS,
+    createVoter,
+    voterArray,
+    getAllVoterData,
+    organizerAddress,
+  } = useContext(VotingContext);
 
   //voters image drop
 
@@ -46,13 +51,13 @@ const allowedVoters = () => {
             <img src={fileUrl} alt="Voter Image" />
             <div className={Style.voterInfo_paragraph}>
               <p>
-                Name:<span>&nbps; {formInput.name}</span>
+                Name:<span>&nbsp; {formInput.name}</span>
               </p>
               <p>
-                Address:<span>&nbps; {formInput.address.slice(0, 20)}</span>
+                Address:<span>&nbsp; {formInput.address.slice(0, 20)}</span>
               </p>
               <p>
-                Position:<span>&nbps; {formInput.position}</span>
+                Age:<span>&nbsp; {formInput.age}</span>
               </p>
             </div>
           </div>
@@ -61,9 +66,9 @@ const allowedVoters = () => {
         {!fileUrl && (
           <div className={Style.sideInfo}>
             <div className={Style.sideInfo_box}>
-              <h4>Create candidate for voting</h4>
-              <p>Blockchain voting organization, provide ethereum</p>
-              <p className={Style.sideInfo_para}>Contract Candidate</p>
+              {/* <h4>Create candidate for voting</h4>
+              <p>Blockchain voting organization, provide ethereum</p> */}
+              <p className={Style.sideInfo_para}>All Voters</p>
 
               <div className={Style.car}>
                 {voterArray.map((el, i) => (
@@ -130,16 +135,16 @@ const allowedVoters = () => {
           />
           <Input
             inputType="text"
-            title="Position"
-            placeholder="Voter Position"
+            title="Age"
+            placeholder="Voter Age"
             handleClick={(e) =>
-              setFormInput({ ...formInput, position: e.target.value })
+              setFormInput({ ...formInput, age: e.target.value })
             }
           />
 
           <div className={Style.Button}>
             <Button
-              btnName="Authorized Voter"
+              btnName="Authorize Voter"
               handleClick={() => createVoter(formInput, fileUrl, router)}
             />
           </div>
@@ -149,9 +154,11 @@ const allowedVoters = () => {
       <div className={Style.createVoter}>
         <div className={Style.createdVoter__info}>
           <Image src={candidateImage} alt="userProfile" />
-          <p>Notice for user</p>
           <p>
-            Organizer: <span>0xasfi3483..</span>
+            <b>Organizer:</b> <span>{organizerAddress}</span>
+          </p>
+          <p>
+            <b>Notice for user:</b>
           </p>
           <p>Only organizer of voting contract can create voter for election</p>
         </div>
