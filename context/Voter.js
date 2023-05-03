@@ -60,9 +60,9 @@ export const VotingProvider = ({ children }) => {
       url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
       data: data,
       headers: {
-        pinata_api_key: "af75dcc0fb7585a326ae",
+        pinata_api_key: "a82fe6fb8d74e65ebc84",
         pinata_secret_api_key:
-          "6906074859d9830645032f2d2db5cf4f2de605813404987d0f5c714fb18ca02f",
+          "7ff5a45db9a4c5ffbbf70104a83cb4ad5a06517b581e4b452430e63ecc5ff3f3",
         "Content-Type": "multipart/form-data",
       },
     });
@@ -100,6 +100,7 @@ export const VotingProvider = ({ children }) => {
     try {
       const { name, address, age } = formInput;
       if (!name || !address || !age) return toast("Input data is missing");
+      if (age < 18) return toast("You are not eligible to vote.");
 
       //connecting smart contract
       const web3Modal = new Web3Modal();
@@ -143,7 +144,6 @@ export const VotingProvider = ({ children }) => {
         const singleVoterData = await contract.getVoterData(el);
         pushVoter.push(singleVoterData);
       });
-
       setVoterArray(pushVoter);
 
       //VOTER LENGTH
@@ -177,6 +177,7 @@ export const VotingProvider = ({ children }) => {
     try {
       const { name, address, age } = candidateForm;
       if (!name || !address || !age) return toast("Input data is missing");
+      if (age < 18) return toast("You are not eligible to become a candidate.");
       //connecting smart contract
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();

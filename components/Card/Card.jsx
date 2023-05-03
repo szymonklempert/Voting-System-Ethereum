@@ -3,7 +3,7 @@ import React from "react";
 import Style from "../card/card.module.css";
 import image from "../../assets/candidate1.png";
 
-const card = ({ candidateArray, giveVote }) => {
+const card = ({ candidateArray, giveVote, admin, alreadyVoted }) => {
   return (
     <div className={Style.card}>
       {candidateArray.map((el, i) => (
@@ -25,13 +25,17 @@ const card = ({ candidateArray, giveVote }) => {
             <p>{el[4].toNumber()}</p>
           </div>
 
-          <div className={Style.card_button}>
-            <button
-              onClick={() => giveVote({ id: el[2].toNumber(), address: el[6] })}
-            >
-              Give Vote
-            </button>
-          </div>
+          {!admin && !alreadyVoted && (
+            <div className={Style.card_button}>
+              <button
+                onClick={() =>
+                  giveVote({ id: el[2].toNumber(), address: el[6] })
+                }
+              >
+                Give Vote
+              </button>
+            </div>
+          )}
         </div>
       ))}
     </div>

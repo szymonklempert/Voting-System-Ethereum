@@ -31,16 +31,16 @@ const NavBar = () => {
     }
   };
 
-  useEffect(() => {
-    const isWinnerPresent = localStorage.getItem("winneraddress");
-    setWinnerPresent(isWinnerPresent);
-  }, []);
+  // useEffect(() => {
+  //   const isWinnerPresent = localStorage.getItem("winneraddress");
+  //   setWinnerPresent(isWinnerPresent);
+  // }, []);
 
-  useEffect(() => {
-    if (!winningAddress) return;
-    localStorage.setItem("winneraddress", winningAddress);
-    setWinnerPresent(winningAddress);
-  }, [winningAddress]);
+  // useEffect(() => {
+  //   if (!winningAddress) return;
+  //   localStorage.setItem("winneraddress", winningAddress);
+  //   setWinnerPresent(winningAddress);
+  // }, [winningAddress]);
 
   useEffect(() => {
     if (!currentAccount || !organizerAddress) return;
@@ -102,14 +102,14 @@ const NavBar = () => {
                       Home
                     </Link>
                   </p>
-                  {admin && !winnerPresent && (
+                  {admin && (
                     <p>
                       <Link href={{ pathname: "candidateRegistration" }}>
                         Candidate Registration
                       </Link>
                     </p>
                   )}
-                  {admin && !winnerPresent && (
+                  {admin && (
                     <p>
                       <Link href={{ pathname: "allowedVoters" }}>
                         Voter Registration
