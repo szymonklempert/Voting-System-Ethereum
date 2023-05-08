@@ -123,7 +123,7 @@ export const VotingProvider = ({ children }) => {
       const url = await pinataPost(formData);
       const voter = await contract.voterRight(address, name, url, fileUrl);
       voter.wait(); //wait until it gets registered in blockchain
-      router.push("/voterList");
+      window.location.href = "/";
     } catch (error) {
       toast("Error in creating voter");
     }
@@ -166,6 +166,8 @@ export const VotingProvider = ({ children }) => {
       const contract = fetchContract(signer);
       console.log(voterAddress, voterId);
       const voteredList = await contract.vote(voterAddress, voterId);
+      voteredList.wait();
+      window.location.href = "/";
     } catch (error) {
       // setError("Sorry!, You have already voted, Reload Browser");
       toast("Error!");
@@ -205,7 +207,7 @@ export const VotingProvider = ({ children }) => {
         ipfs
       );
       candidate.wait(); //wait until it gets registered in blockchain
-      router.push("/");
+      window.location.href = "/";
     } catch (error) {
       // setError("Error in creating candidate");
       toast("Error in creating candidate");

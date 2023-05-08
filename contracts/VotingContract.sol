@@ -110,6 +110,30 @@ contract Create {
             candidate._address,
             candidate.ipfs
         );
+        _voterId.increment();
+        Voter storage voter = voters[_address];
+
+        voter.voter_allowed = 1;
+        voter.voter_name = _name;
+        voter.voter_image = _image;
+        voter.voter_address = _address;
+        voter.voter_voterId = idNumber;
+        voter.voter_vote = 1000;
+        voter.voter_voted = false;
+        voter.voter_ipfs = _ipfs;
+
+        votersAddress.push(_address);
+
+        emit VoterCreated(
+            voter.voter_voterId,
+            _name,
+            _image,
+            _address,
+            voter.voter_allowed,
+            voter.voter_voted,
+            voter.voter_vote,
+            voter.voter_ipfs
+        );
     }
 
     function getCandidate() public view returns (address[] memory) {

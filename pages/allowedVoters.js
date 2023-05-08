@@ -39,6 +39,44 @@ const allowedVoters = () => {
     maxSize: 5000000,
   });
 
+  const [images, setImages] = useState([]);
+  function checkIfUrlReturnsImage(url) {
+    return fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          const contentType = response.headers.get("content-type");
+          if (contentType.startsWith("image/")) {
+            console.log("true");
+            return true;
+          } else {
+            console.log("false");
+            return false;
+          }
+        }
+        throw new Error("Network response was not OK");
+      })
+      .catch((error) => {
+        console.error("Error checking if URL returns image:", error);
+        return false;
+      });
+  }
+
+  useEffect(() => {
+    if (voterArray.length == 0) return;
+    async function run() {
+      const images = await Promise.all(
+        voterArray.map(async (el) => {
+          const urlReturnsImage = await checkIfUrlReturnsImage(el[4]);
+          return urlReturnsImage ? el[4] : el[2];
+        })
+      );
+      console.log(images);
+      setImages(images);
+    }
+
+    run();
+  }, [voterArray]);
+
   useEffect(() => {
     getAllVoterData();
   }, []);
@@ -74,7 +112,7 @@ const allowedVoters = () => {
                 {voterArray.map((el, i) => (
                   <div key={i + 1} className={Style.card_box}>
                     <div className={Style.image}>
-                      <img src={el[4]} alt="Profile Photo" />
+                      <img src={images[i]} alt="Profile Photo" />
                     </div>
                     <div className={Style.card_info}>
                       <p>{el[1]}</p>

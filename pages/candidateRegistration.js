@@ -173,7 +173,7 @@ const candidateRegistration = () => {
             </b>
           </p>
           <pre>
-            Only organizer of voting contract can create voter for election
+            Only organizer of voting contract can create candidate for election
           </pre>
         </div>
       </div>
