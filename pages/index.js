@@ -19,6 +19,7 @@ const index = () => {
     winningAddress,
     organizerAddress,
     voterArray,
+    votedVotersArray,
   } = useContext(VotingContext);
 
   useEffect(() => {
@@ -95,6 +96,7 @@ const index = () => {
         </p>
       ) : (
         admin &&
+        votedVotersArray.length != 0 &&
         candidateLength > 0 && (
           <button onClick={findWinner} className={Style.winnerButton}>
             Get winner

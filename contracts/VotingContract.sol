@@ -54,6 +54,7 @@ contract Create {
         bool voter_voted;
         uint256 voter_vote;
         string voter_ipfs;
+        bool is_candidate;
     }
 
     event VoterCreated(
@@ -64,7 +65,8 @@ contract Create {
         uint256 voter_allowed,
         bool voter_voted,
         uint256 voter_vote,
-        string voter_ipfs
+        string voter_ipfs,
+        bool is_candidate
     );
 
     ////////////VOTERS////////////////////////
@@ -121,6 +123,7 @@ contract Create {
         voter.voter_vote = 1000;
         voter.voter_voted = false;
         voter.voter_ipfs = _ipfs;
+        voter.is_candidate = true;
 
         votersAddress.push(_address);
 
@@ -132,7 +135,8 @@ contract Create {
             voter.voter_allowed,
             voter.voter_voted,
             voter.voter_vote,
-            voter.voter_ipfs
+            voter.voter_ipfs,
+            voter.is_candidate
         );
     }
 
@@ -199,6 +203,7 @@ contract Create {
         voter.voter_vote = 1000;
         voter.voter_voted = false;
         voter.voter_ipfs = _ipfs;
+        voter.is_candidate = false;
 
         votersAddress.push(_address);
 
@@ -210,7 +215,8 @@ contract Create {
             voter.voter_allowed,
             voter.voter_voted,
             voter.voter_vote,
-            voter.voter_ipfs
+            voter.voter_ipfs,
+            voter.is_candidate
         );
         // }
     }
@@ -247,17 +253,20 @@ contract Create {
             address,
             string memory,
             uint256,
+            bool,
             bool
         )
     {
+        Voter memory u = voters[_address];
         return (
-            voters[_address].voter_voterId,
-            voters[_address].voter_name,
-            voters[_address].voter_image,
-            voters[_address].voter_address,
-            voters[_address].voter_ipfs,
-            voters[_address].voter_allowed,
-            voters[_address].voter_voted
+            u.voter_voterId,
+            u.voter_name,
+            u.voter_ipfs,
+            u.voter_address,
+            u.voter_image,
+            u.voter_allowed,
+            u.voter_voted,
+            u.is_candidate
         );
     }
 

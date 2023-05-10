@@ -23,6 +23,7 @@ export const VotingProvider = ({ children }) => {
   const pushCandidate = [];
   const candidateIndex = [];
   const [candidateArray, setCandidateArray] = useState([]);
+  const [votedVotersArray, setVotedVotersArray] = useState([]);
 
   const [error, setError] = useState("");
   const highestVote = [];
@@ -142,6 +143,7 @@ export const VotingProvider = ({ children }) => {
 
       voterListData.map(async (el) => {
         const singleVoterData = await contract.getVoterData(el);
+        console.log("singlevoterdata", singleVoterData);
         pushVoter.push(singleVoterData);
       });
       setVoterArray(pushVoter);
@@ -270,7 +272,19 @@ export const VotingProvider = ({ children }) => {
     setOrganizerAddress(organizerAddress);
   };
 
+  const getVotedVotersArray = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
+
+    const votedVoters = await contract.getVotedVotersList();
+    setVotedVotersArray(votedVoters);
+  };
+
   getOrganizerAddress();
+  getVotedVotersArray();
 
   return (
     <VotingContext.Provider
@@ -295,6 +309,7 @@ export const VotingProvider = ({ children }) => {
         findWinner,
         winningAddress,
         organizerAddress,
+        votedVotersArray,
       }}
     >
       {children}

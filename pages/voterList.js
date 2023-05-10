@@ -9,7 +9,7 @@ const voterList = () => {
 
   useEffect(() => {
     getAllVoterData();
-    console.log(voterArray);
+    console.log("dsda", voterArray);
   }, []);
 
   return (
