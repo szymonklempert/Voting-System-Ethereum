@@ -20,6 +20,10 @@ const index = () => {
     organizerAddress,
     voterArray,
     votedVotersArray,
+    winningAddressAfterEnd,
+    isVoteEnd,
+    voteEndAddress,
+    getCandidateData,
   } = useContext(VotingContext);
 
   useEffect(() => {
@@ -27,14 +31,23 @@ const index = () => {
     checkIfWalletIsConnected();
     getNewCandidate();
   }, []);
-  const [winnerPresent, setWinnerPresent] = useState(false);
-  const [alreadyVoted, setAlreadyVoted] = useState(false);
-  const [admin, setAdmin] = useState(false);
-  // useEffect(() => {
-  //   const isWinnerPresent = localStorage.getItem("winneraddress");
-  //   setWinnerPresent(isWinnerPresent);
-  // }, []);
 
+  const [alreadyVoted, setAlreadyVoted] = useState(false);
+  const [winningData, setWinningData] = useState();
+  const [admin, setAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!isVoteEnd) return;
+    winningAddressAfterEnd();
+  }, [isVoteEnd]);
+  useEffect(() => {
+    if (!voteEndAddress) return;
+    console.log(voteEndAddress);
+    getCandidateData(voteEndAddress).then((val) => {
+      setWinningData(val);
+      console.log(val);
+    });
+  }, [voteEndAddress]);
   useEffect(() => {
     setTimeout(() => {
       console.log(voterArray);
@@ -61,11 +74,6 @@ const index = () => {
       setAdmin(false);
     }
   }, [currentAccount, organizerAddress]);
-  useEffect(() => {
-    if (!winningAddress) return;
-    // localStorage.setItem("winneraddress", winningAddress);
-    setWinnerPresent(winningAddress);
-  }, [winningAddress]);
   return (
     <div className={Style.home}>
       {currentAccount && (
@@ -89,29 +97,40 @@ const index = () => {
           </div> */}
         </div>
       )}
-      {winningAddress ? (
+      {admin &&
+        votedVotersArray.length != 0 &&
+        candidateLength > 0 &&
+        !isVoteEnd && (
+          <button onClick={findWinner} className={Style.winnerButton}>
+            End Voting
+          </button>
+        )}
+      {isVoteEnd && voteEndAddress != "" && winningData && (
+        // <>
+        //   {winningData[6] == "0x0000000000000000000000000000000000000000" ? (
+        //     <p className={Style.winnerText}>
+        //       Nobody <span style={{ color: "green" }}>won the voting.</span>
+        //     </p>
+        //   ) : (
+        //     <p className={Style.winnerText}>
+        //       {winningData[1]}{" "}
+        //       <span style={{ color: "green" }}>won the voting.</span>
+        //     </p>
+        //   )}
+        // </>
         <p className={Style.winnerText}>
-          {winningAddress}{" "}
+          {winningData[6]}{" "}
           <span style={{ color: "green" }}>won the voting.</span>
         </p>
-      ) : (
-        admin &&
-        votedVotersArray.length != 0 &&
-        candidateLength > 0 && (
-          <button onClick={findWinner} className={Style.winnerButton}>
-            Get winner
-          </button>
-        )
       )}
 
-      {!winnerPresent && (
-        <Card
-          candidateArray={candidateArray}
-          giveVote={giveVote}
-          admin={admin}
-          alreadyVoted={alreadyVoted}
-        />
-      )}
+      <Card
+        candidateArray={candidateArray}
+        giveVote={giveVote}
+        admin={admin}
+        alreadyVoted={alreadyVoted}
+        isVoteEnd={isVoteEnd}
+      />
     </div>
   );
 };

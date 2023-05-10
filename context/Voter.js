@@ -20,6 +20,7 @@ export const VotingProvider = ({ children }) => {
   const [candidateLength, setCandidateLength] = useState("");
   const [winningAddress, setWinningAddress] = useState("");
   const [organizerAddress, setOrganizerAddress] = useState("");
+  const [isVoteEnd, setIsVoteEnd] = useState(false);
   const pushCandidate = [];
   const candidateIndex = [];
   const [candidateArray, setCandidateArray] = useState([]);
@@ -123,7 +124,7 @@ export const VotingProvider = ({ children }) => {
       );
       const url = await pinataPost(formData);
       const voter = await contract.voterRight(address, name, url, fileUrl);
-      voter.wait(); //wait until it gets registered in blockchain
+      await voter.wait(); //wait until it gets registered in blockchain
       window.location.href = "/";
     } catch (error) {
       toast("Error in creating voter");
@@ -168,7 +169,7 @@ export const VotingProvider = ({ children }) => {
       const contract = fetchContract(signer);
       console.log(voterAddress, voterId);
       const voteredList = await contract.vote(voterAddress, voterId);
-      voteredList.wait();
+      await voteredList.wait();
       window.location.href = "/";
     } catch (error) {
       // setError("Sorry!, You have already voted, Reload Browser");
@@ -208,7 +209,7 @@ export const VotingProvider = ({ children }) => {
         fileUrl,
         ipfs
       );
-      candidate.wait(); //wait until it gets registered in blockchain
+      await candidate.wait(); //wait until it gets registered in blockchain
       window.location.href = "/";
     } catch (error) {
       // setError("Error in creating candidate");
@@ -217,6 +218,20 @@ export const VotingProvider = ({ children }) => {
   };
 
   //get candidate data
+  const getCandidateData = async (address) => {
+    try {
+      //connecting smart contract
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      const contract = fetchContract(signer);
+      return await contract.getCandidateData(address);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getNewCandidate = async () => {
     try {
       //connecting smart contract
@@ -256,6 +271,7 @@ export const VotingProvider = ({ children }) => {
 
       const winnerAddress = await contract.getWinner();
       setWinningAddress(winnerAddress);
+      setIsVoteEnd(true);
     } catch (error) {
       console.log(error);
     }
@@ -282,9 +298,33 @@ export const VotingProvider = ({ children }) => {
     const votedVoters = await contract.getVotedVotersList();
     setVotedVotersArray(votedVoters);
   };
+  const [voteEndAddress, setVoteEndAddress] = useState();
+
+  const isVotingEndedFunc = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
+
+    const val = await contract.isVotingEnded();
+    setIsVoteEnd(val);
+  };
+
+  const winningAddressAfterEnd = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
+
+    const val = await contract.getWinningAddressAfterVoteComplete();
+    setVoteEndAddress(val);
+  };
 
   getOrganizerAddress();
   getVotedVotersArray();
+  isVotingEndedFunc();
 
   return (
     <VotingContext.Provider
@@ -298,6 +338,7 @@ export const VotingProvider = ({ children }) => {
         giveVote,
         setCandidate,
         getNewCandidate,
+        getCandidateData,
         error,
         voterArray,
         voterLength,
@@ -310,6 +351,9 @@ export const VotingProvider = ({ children }) => {
         winningAddress,
         organizerAddress,
         votedVotersArray,
+        isVoteEnd,
+        winningAddressAfterEnd,
+        voteEndAddress,
       }}
     >
       {children}

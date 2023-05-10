@@ -11,6 +11,8 @@ contract Create {
     Counters.Counter public _candidateId;
 
     address public votingOrganizer;
+    bool public votingEnded;
+    address public winnerAddress;
 
     ///CANDIDATE FOR VOTING
     struct Candidate {
@@ -278,25 +280,47 @@ contract Create {
         return votersAddress;
     }
 
-    function getWinner() public view returns (address winner) {
+    function getWinner() public returns (address winner) {
         uint256 highestVoteCount = 0;
+        bool isUnique = true; // Flag to check if the winner is unique
         require(
             votingOrganizer == msg.sender,
-            "Only organizer can finish the voting process and get the winner"
+            "Only organizer can get the winner"
         );
+        votingEnded = true;
         for (uint256 i = 0; i < candidateAddress.length; i++) {
             address candidateAddress_i = candidateAddress[i];
             uint256 voteCount_i = candidates[candidateAddress_i].voteCount;
             if (voteCount_i > highestVoteCount) {
                 highestVoteCount = voteCount_i;
-                winner = candidateAddress_i;
+                winnerAddress = candidateAddress_i;
+                isUnique = true; // Reset the flag when a new highest vote count is found
+            } else if (voteCount_i == highestVoteCount) {
+                isUnique = false; // Multiple candidates have the same highest vote count
             }
         }
-        return winner;
+
+        if (!isUnique) {
+            winnerAddress = address(0); // Set winner as address(0) if multiple candidates have the same vote count
+        }
+
+        return winnerAddress;
     }
 
     //get organizer
     function getOrganizerAddress() public view returns (address) {
         return votingOrganizer;
+    }
+
+    function isVotingEnded() public view returns (bool) {
+        return votingEnded;
+    }
+
+    function getWinningAddressAfterVoteComplete()
+        public
+        view
+        returns (address)
+    {
+        return winnerAddress;
     }
 }

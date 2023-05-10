@@ -18,6 +18,7 @@ const NavBar = () => {
     currentAccount,
     organizerAddress,
     winningAddress,
+    isVoteEnd,
   } = useContext(VotingContext);
   const [openNav, setOpenNav] = useState(true);
   const [admin, setAdmin] = useState(false);
@@ -102,14 +103,14 @@ const NavBar = () => {
                       Home
                     </Link>
                   </p>
-                  {admin && (
+                  {admin && !isVoteEnd && (
                     <p>
                       <Link href={{ pathname: "candidateRegistration" }}>
                         Candidate Registration
                       </Link>
                     </p>
                   )}
-                  {admin && (
+                  {admin && !isVoteEnd && (
                     <p>
                       <Link href={{ pathname: "allowedVoters" }}>
                         Voter Registration
