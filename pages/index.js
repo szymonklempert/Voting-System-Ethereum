@@ -119,7 +119,7 @@ const index = () => {
         //   )}
         // </>
         <p className={Style.winnerText}>
-          {winningData[6]}{" "}
+          {winningData[1]}{" "}
           <span style={{ color: "green" }}>won the voting.</span>
         </p>
       )}
