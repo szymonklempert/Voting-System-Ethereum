@@ -19,7 +19,6 @@ const index = () => {
     winningAddress,
     organizerAddress,
     voterArray,
-    votedVotersArray,
     winningAddressAfterEnd,
     isVoteEnd,
     voteEndAddress,
@@ -33,6 +32,7 @@ const index = () => {
   }, []);
 
   const [alreadyVoted, setAlreadyVoted] = useState(false);
+  const [votedVotersPresent, setVotedVotersPresent] = useState(false);
   const [winningData, setWinningData] = useState();
   const [admin, setAdmin] = useState(false);
 
@@ -52,6 +52,9 @@ const index = () => {
     setTimeout(() => {
       console.log(voterArray);
       voterArray.map((voters) => {
+        if (voters[6] == true) {
+          setVotedVotersPresent(true);
+        }
         if (
           web3Utils.toChecksumAddress(currentAccount) ==
             web3Utils.toChecksumAddress(voters[3]) &&
@@ -97,14 +100,11 @@ const index = () => {
           </div> */}
         </div>
       )}
-      {admin &&
-        votedVotersArray.length != 0 &&
-        candidateLength > 0 &&
-        !isVoteEnd && (
-          <button onClick={findWinner} className={Style.winnerButton}>
-            End Voting
-          </button>
-        )}
+      {admin && votedVotersPresent && candidateLength > 0 && !isVoteEnd && (
+        <button onClick={findWinner} className={Style.winnerButton}>
+          End Voting
+        </button>
+      )}
       {isVoteEnd && voteEndAddress != "" && winningData && (
         // <>
         //   {winningData[6] == "0x0000000000000000000000000000000000000000" ? (
