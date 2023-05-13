@@ -131,46 +131,49 @@ export const VotingProvider = ({ children }) => {
     }
   };
 
-  const getAllVoterData = async () => {
+  const connectToContract = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
+    return contract;
+  };
+
+  const getAllVoterData = () => {
     try {
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      const contract = fetchContract(signer);
       //VOTR LIST
-      const voterListData = await contract.getVoterList();
-      setVoterAddress(voterListData);
+      connectToContract().then(async (contract) => {
+        const voterListData = await contract.getVoterList();
+        setVoterAddress(voterListData);
 
-      voterListData.map(async (el) => {
-        const singleVoterData = await contract.getVoterData(el);
-        console.log("singlevoterdata", singleVoterData);
-        pushVoter.push(singleVoterData);
+        voterListData.map(async (el) => {
+          const singleVoterData = await contract.getVoterData(el);
+          console.log("singlevoterdata", singleVoterData);
+          pushVoter.push(singleVoterData);
+        });
+        setVoterArray(pushVoter);
+
+        //VOTER LENGTH
+        const voterList = await contract.getVoterLength();
+        setVoterLength(voterList.toNumber());
       });
-      setVoterArray(pushVoter);
-
-      //VOTER LENGTH
-      const voterList = await contract.getVoterLength();
-      setVoterLength(voterList.toNumber());
     } catch (error) {
       // setError("Couldnot fetch voters data");
       toast("Couldnot fetch voters data");
     }
   };
 
-  const giveVote = async (id) => {
+  const giveVote = (id) => {
     try {
       const voterAddress = id.address;
       const voterId = id.id;
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      const contract = fetchContract(signer);
-      console.log(voterAddress, voterId);
-      const voteredList = await contract.vote(voterAddress, voterId);
-      await voteredList.wait();
-      window.location.href = "/";
+      connectToContract().then(async (contract) => {
+        console.log(voterAddress, voterId);
+        const voteredList = await contract.vote(voterAddress, voterId);
+        await voteredList.wait();
+        window.location.href = "/";
+      });
     } catch (error) {
       // setError("Sorry!, You have already voted, Reload Browser");
       toast("Error!");
@@ -178,39 +181,36 @@ export const VotingProvider = ({ children }) => {
   };
 
   //Candidate section
-  const setCandidate = async (candidateForm, fileUrl, router) => {
+  const setCandidate = (candidateForm, fileUrl, router) => {
     try {
       const { name, address, age } = candidateForm;
       if (!name || !address || !age) return toast("Input data is missing");
       if (age < 18) return toast("You are not eligible to become a candidate.");
       //connecting smart contract
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      const contract = fetchContract(signer);
-      const dataString = JSON.stringify({
-        name,
-        address,
-        image: fileUrl,
-        age,
+      connectToContract().then(async (contract) => {
+        const dataString = JSON.stringify({
+          name,
+          address,
+          image: fileUrl,
+          age,
+        });
+        const formData = new FormData();
+        formData.append(
+          "file",
+          new Blob([dataString], { type: "application/json" }),
+          "myData.json"
+        );
+        const ipfs = await pinataPost(formData);
+        const candidate = await contract.setCandidate(
+          address,
+          age,
+          name,
+          fileUrl,
+          ipfs
+        );
+        await candidate.wait(); //wait until it gets registered in blockchain
+        window.location.href = "/";
       });
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new Blob([dataString], { type: "application/json" }),
-        "myData.json"
-      );
-      const ipfs = await pinataPost(formData);
-      const candidate = await contract.setCandidate(
-        address,
-        age,
-        name,
-        fileUrl,
-        ipfs
-      );
-      await candidate.wait(); //wait until it gets registered in blockchain
-      window.location.href = "/";
     } catch (error) {
       // setError("Error in creating candidate");
       toast("Error in creating candidate");
@@ -218,108 +218,79 @@ export const VotingProvider = ({ children }) => {
   };
 
   //get candidate data
-  const getCandidateData = async (address) => {
+  const getCandidateData = (address) => {
     try {
       //connecting smart contract
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      const contract = fetchContract(signer);
-      return await contract.getCandidateData(address);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getNewCandidate = async () => {
-    try {
-      //connecting smart contract
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      const contract = fetchContract(signer);
-
-      //all candidate
-      const allCandidate = await contract.getCandidate();
-
-      allCandidate.map(async (el) => {
-        const singleCandidateData = await contract.getCandidateData(el);
-        pushCandidate.push(singleCandidateData);
-        candidateIndex.push(singleCandidateData[2].toNumber());
+      connectToContract().then(async (contract) => {
+        return await contract.getCandidateData(address);
       });
-
-      setCandidateArray(pushCandidate);
-
-      //length of candidate
-      const allCandidateLength = await contract.getCandidateLength();
-      setCandidateLength(allCandidateLength.toNumber());
     } catch (error) {
       console.log(error);
     }
   };
 
-  const findWinner = async () => {
+  const getNewCandidate = () => {
     try {
-      //connecting smart contract
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      const contract = fetchContract(signer);
+      connectToContract().then(async (contract) => {
+        //all candidate
+        const allCandidate = await contract.getCandidate();
 
-      const winnerAddress = await contract.getWinner();
-      setWinningAddress(winnerAddress);
-      setIsVoteEnd(true);
+        allCandidate.map(async (el) => {
+          const singleCandidateData = await contract.getCandidateData(el);
+          pushCandidate.push(singleCandidateData);
+          candidateIndex.push(singleCandidateData[2].toNumber());
+        });
+
+        setCandidateArray(pushCandidate);
+
+        //length of candidate
+        const allCandidateLength = await contract.getCandidateLength();
+        setCandidateLength(allCandidateLength.toNumber());
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getOrganizerAddress = async () => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = fetchContract(signer);
-
-    const organizerAddress = await contract.getOrganizerAddress();
-    setOrganizerAddress(organizerAddress);
+  const findWinner = () => {
+    try {
+      connectToContract().then(async (contract) => {
+        const winnerAddress = await contract.getWinner();
+        setWinningAddress(winnerAddress);
+        setIsVoteEnd(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getVotedVotersArray = async () => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = fetchContract(signer);
+  const getOrganizerAddress = () => {
+    connectToContract().then(async (contract) => {
+      const organizerAddress = await contract.getOrganizerAddress();
+      setOrganizerAddress(organizerAddress);
+    });
+  };
 
-    const votedVoters = await contract.getVotedVotersList();
-    setVotedVotersArray(votedVoters);
+  const getVotedVotersArray = () => {
+    connectToContract().then(async (contract) => {
+      const votedVoters = await contract.getVotedVotersList();
+      setVotedVotersArray(votedVoters);
+    });
   };
   const [voteEndAddress, setVoteEndAddress] = useState();
 
-  const isVotingEndedFunc = async () => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = fetchContract(signer);
-
-    const val = await contract.isVotingEnded();
-    setIsVoteEnd(val);
+  const isVotingEndedFunc = () => {
+    connectToContract().then(async (contract) => {
+      const val = await contract.isVotingEnded();
+      setIsVoteEnd(val);
+    });
   };
 
-  const winningAddressAfterEnd = async () => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = fetchContract(signer);
-
-    const val = await contract.getWinningAddressAfterVoteComplete();
-    setVoteEndAddress(val);
+  const winningAddressAfterEnd = () => {
+    connectToContract().then(async (contract) => {
+      const val = await contract.getWinningAddressAfterVoteComplete();
+      setVoteEndAddress(val);
+    });
   };
 
   getOrganizerAddress();
