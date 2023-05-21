@@ -8,9 +8,12 @@ import candidateImage from "../assets/candidate1.png";
 import uploadImage from "../assets/upload.png";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import { candidatesList } from "../candidatesAndVoters";
+const web3Utils = require("web3-utils");
 
 const candidateRegistration = () => {
   const [fileUrl, setFileUrl] = useState(null);
+  const [availableCand, setAvailableCand] = useState([]);
   const [candidateForm, setCandidateForm] = useState({
     name: "",
     address: "",
@@ -42,6 +45,25 @@ const candidateRegistration = () => {
   useEffect(() => {
     getNewCandidate();
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAvailableCand(candidatesList);
+      if (candidateArray.length == 0) return;
+      candidateArray.map((regCand) => {
+        candidatesList.map((cand, index) => {
+          if (
+            web3Utils.toChecksumAddress(cand) ==
+            web3Utils.toChecksumAddress(regCand[6])
+          ) {
+            console.log(regCand[6], index);
+            candidatesList.splice(index, 1);
+          }
+        });
+      });
+      setAvailableCand(candidatesList);
+    }, [500]);
+  }, [candidateArray]);
 
   return (
     <div className={Style.createVoter}>
@@ -175,6 +197,15 @@ const candidateRegistration = () => {
           <pre>
             Only organizer of voting contract can create candidate for election
           </pre>
+          <br />
+          <p>
+            <b>
+              <u>Candidates left to create:</u>
+            </b>
+          </p>
+          {availableCand.map((item, index) => (
+            <p key={index}>{item}</p>
+          ))}
         </div>
       </div>
     </div>

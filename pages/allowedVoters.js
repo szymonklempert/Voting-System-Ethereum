@@ -8,6 +8,8 @@ import candidateImage from "../assets/candidate1.png";
 import uploadImage from "../assets/upload.png";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import { votersList } from "../candidatesAndVoters";
+const web3Utils = require("web3-utils");
 
 const allowedVoters = () => {
   const [fileUrl, setFileUrl] = useState(null);
@@ -25,7 +27,7 @@ const allowedVoters = () => {
     getAllVoterData,
     organizerAddress,
   } = useContext(VotingContext);
-
+  const [availableVoters, setAvailableVoters] = useState([]);
   //voters image drop
 
   const onDrop = useCallback(async (acceptedFile) => {
@@ -42,6 +44,25 @@ const allowedVoters = () => {
   useEffect(() => {
     getAllVoterData();
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAvailableVoters(votersList);
+      if (voterArray.length == 0) return;
+      voterArray.map((regVot) => {
+        votersList.map((vot, index) => {
+          if (
+            web3Utils.toChecksumAddress(vot) ==
+            web3Utils.toChecksumAddress(regVot[3])
+          ) {
+            console.log(regVot[6], index);
+            votersList.splice(index, 1);
+          }
+        });
+      });
+      setAvailableVoters(votersList);
+    }, [500]);
+  }, [voterArray]);
 
   return (
     <div className={Style.createVoter}>
@@ -161,6 +182,15 @@ const allowedVoters = () => {
             <b>Notice for user:</b>
           </p>
           <p>Only organizer of voting contract can create voter for election</p>
+          <br />
+          <p>
+            <b>
+              <u>Voters left to create:</u>
+            </b>
+          </p>
+          {availableVoters.map((item, index) => (
+            <p key={index}>{item}</p>
+          ))}
         </div>
       </div>
     </div>

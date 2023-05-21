@@ -117,6 +117,11 @@ const NavBar = () => {
                       </Link>
                     </p>
                   )}
+                  {admin && (
+                    <p>
+                      <Link href={{ pathname: "blocks" }}>All blocks</Link>
+                    </p>
+                  )}
 
                   <p>
                     <Link href={{ pathname: "voterList" }}>Voter List</Link>
