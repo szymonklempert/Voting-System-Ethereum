@@ -47,7 +47,7 @@ const blocks = () => {
               {block.transactions.map((tx) => (
                 <li key={tx.hash}>
                   <strong>From:</strong> {tx.from},&nbsp;
-                  <strong>To:</strong> {tx.to}
+                  <strong>To:</strong> {tx.to ? tx.to : "Contract Creation"}
                 </li>
               ))}
             </ul>
