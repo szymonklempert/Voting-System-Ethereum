@@ -11,11 +11,12 @@ const blocks = () => {
 
     for (let i = 0; i <= latestBlockNumber; i++) {
       const block = await provider.getBlockWithTransactions(i);
-
+      console.log(block);
       const transactions = block.transactions.map((tx) => ({
         from: tx.from,
         to: tx.to,
-        hash: tx.hash,
+        hash: block.hash,
+        parentHash: block.parentHash,
       }));
 
       blocks.push({
@@ -46,8 +47,18 @@ const blocks = () => {
             <ul>
               {block.transactions.map((tx) => (
                 <li key={tx.hash}>
-                  <strong>From:</strong> {tx.from},&nbsp;
-                  <strong>To:</strong> {tx.to ? tx.to : "Contract Creation"}
+                  <p>
+                    <strong>Hash:</strong> {tx.hash},
+                  </p>
+                  <p>
+                    <strong>From:</strong> {tx.from},
+                  </p>
+                  <p>
+                    <strong>To:</strong> {tx.to ? tx.to : "Contract Creation"}
+                  </p>
+                  <p>
+                    <strong>PrevHash:</strong> {tx.parentHash}
+                  </p>
                 </li>
               ))}
             </ul>
