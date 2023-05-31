@@ -9,8 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.9.0",
+    "axios": "^1.4.0",
+    "ipfs-http-client": "^60.0.1",
     "next": "13.4.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-countdown": "^2.3.5",
+    "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
+    "web3modal": "^1.9.12"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "hardhat": "^2.14.0"
   }
 }

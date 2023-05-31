@@ -1,0 +1,30 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    background-image: linear-gradient(to right top, #004b66, #005693, #165279, #6dcde8, #53b0d2);
+    /* background-color: #12263A; */
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+input[role="presentation"] {
+  display: none;
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+  border-radius: 11px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
