@@ -23,8 +23,12 @@ export const VotingProvider = ({ children }) => {
   const candidateIndex = [];
   const [candidateArray, setCandidateArray] = useState(pushCandidate);
 
+  //end of candidate data
+
   const [error, setError] = useState("");
   const highestVote = [];
+
+  //voter section
 
   const pushVoter = [];
   const [voterArray, setVoterArray] = useState(pushVoter);
@@ -43,6 +47,8 @@ export const VotingProvider = ({ children }) => {
     }
   };
 
+  //connecting to wallet 
+
   const connectWallet = async () => {
     if (!window.ethereum) return toast("Please Install Metamask");
     const account = await window.ethereum.request({
@@ -51,23 +57,23 @@ export const VotingProvider = ({ children }) => {
     setCurrentAccount(account[0]);
   };
 
-    //upload to ipfs voter image
-    const uploadToIPFS = async (file) => {
-        try {
-            const added = await client.add({content: file});
+  //upload to ipfs voter image
+  const uploadToIPFS = async (file) => {
+    try {
+      const added = await client.add({ content: file });
 
-            const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-            return url;
-            // const formData = new FormData();
-            // formData.append("file", file);
-            // const url = await pinataPost(formData);
-            // return url;
-        } catch (error) {
-            // console.log(error);
-            // toast("Error uploading file to IPFS");
-            setError("Erro uploading file to ipfs");
-        }
-        };
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      return url;
+      // const formData = new FormData();
+      // formData.append("file", file);
+      // const url = await pinataPost(formData);
+      // return url;
+    } catch (error) {
+      // console.log(error);
+      // toast("Error uploading file to IPFS");
+      setError("Error uploading file to ipfs");
+    }
+  };
 
   return (
     <VotingContext.Provider value={{ votingTitle, checkIfWalletIsConnected }}>
