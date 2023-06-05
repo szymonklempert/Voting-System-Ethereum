@@ -1,0 +1,21 @@
+.input_box {
+    width: 100%;
+    background-color: cadetblue;
+    padding: .5rem;
+    border-radius: .2rem;
+}
+
+.input_box input {
+    width: 100%;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    font-size: 1.2rem;
+    color: white;
+    padding-inline: .5rem;
+}
+
+.input_box placqeholder {
+    color: white;
+    text-transform: capitalize;
+}
