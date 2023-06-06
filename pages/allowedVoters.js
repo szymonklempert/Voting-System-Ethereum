@@ -5,9 +5,12 @@ import Image from "next/image";
 
 import { VotingContext } from "../context/Voter";
 import Style from "../styles/allowedVoters.module.css";
-import images from "../assets";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+
+//assets import
+import uploadImage from "../assets/upload.png";
+import creatorImage from "../assets/candidate.png";
 
 const allowedVoters = () => {
   const [fileUrl, setFileUrl] = useState(null);
@@ -18,7 +21,7 @@ const allowedVoters = () => {
   });
 
   const router = useRouter();
-  const { uploadToIPFS } = useContext(VotingContext);
+  const { uploadToIPFS, createVoter } = useContext(VotingContext);
 
   const onDrop = useCallback(async (acceptedFile) => {
     const url = await uploadToIPFS(acceptedFile[0]);
@@ -97,8 +100,8 @@ const allowedVoters = () => {
                 <div className={Style.voter_container_box_div_info}>
                   <p>Upload file
                   </p>
-                  <div className={Style.Style.voter_container_box_div_image}>
-                    <Image src={images.creator} width={150} height={150} objectFit="contain" alt="File upload"></Image>
+                  <div className={Style.voter_container_box_div_image}>
+                    <Image src={uploadImage} width={150} height={150} objectFit="contain" alt="File upload"></Image>
                   </div>
                   <p>Drag and drop</p>
                   <p>or browse media on your device</p>
@@ -112,15 +115,17 @@ const allowedVoters = () => {
           <Input inputType="text" title="Name" placeHolder="Voter Name" handleClick={(e) => setFormInput({ ...formInput, name: e.target.value })}></Input>
           <Input inputType="text" title="Address" placeHolder="Voter Address" handleClick={(e) => setFormInput({ ...formInput, address: e.target.value })}></Input>
           <Input inputType="text" title="Position" placeHolder="Position" handleClick={(e) => setFormInput({ ...formInput, position: e.target.value })}></Input>
-          <div className={Style.Button}>
-            <Button btnName="Authorize Voter" handleClick={() => { }} />
+          <div className={Style.Button} >
+            <Button
+              btnName="Authorize Voter"
+              handleClick={() => createVoter(formInput, fileUrl, router)} />
           </div>
         </div>
       </div>
       <div className={Style.createdVoter}>
         <div className={Style.createdVoter_info}>
-          <Image src={images.creator} alt="Voter Image"></Image>
-          <p> Notice for user</p>
+          <Image src={creatorImage} alt="Voter Image"></Image>
+          <p>Notice for user</p>
           <p>Organizer</p>
           <p>Only organiser of the voting contract can create voting </p>
         </div>

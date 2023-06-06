@@ -1,4 +1,4 @@
-.button {
+/* .button {
     margin-block: 2rem;
     background-color: transparent;
     border: 1px dotted blueviolet;
@@ -13,4 +13,32 @@
 .button:hover {
     background-color: cornflowerblue;
     color: white;
+} */
+
+.button {
+
+    font-weight: 0;
+    font-size: 14px;
+    color: #fff;
+    background: linear-gradient(125deg, #0066CC 0%, #c500cc 100%);
+    padding: 10px 30px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 20px 30px;
+    border-radius: 50px;
+    transition: 1000ms;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+}
+
+.button:hover {
+
+    transition: 1000ms;
+    padding: 10px 50px;
+    transform: translateY(-9px);
+    background: linear-gradient(125deg, #0066CC 0%, #c500cc 100%);
+    color: #ffffff;
+    border: solid 2px #0066cc;
 }

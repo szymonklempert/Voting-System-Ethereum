@@ -10,7 +10,7 @@ const Input = ({ inputType, title, placeHolder, handleClick }) => {
                 <div className={Style.input_box}>
                     <input type="text" className={Style.input_box_form} placeholder={placeHolder} onClick={handleClick} />
                 </div>
-            ) :}
+            ) : <div></div>}
         </div>
     )
 };
