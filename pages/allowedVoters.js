@@ -98,8 +98,9 @@ const allowedVoters = () => {
                       <img src={el[7] ? el[4] : el[2]} alt="Profile Photo" />
                     </div>
                     <div className={Style.card_info}>
-                      <p>{el[1]}</p>
-                      <p>Address: {el[3].slice(0, 10)} ..</p>
+                      <p>Name</p>
+                      <p>Address</p>
+                      <p>Details</p>
                     </div>
                   </div>
                 ))}

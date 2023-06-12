@@ -61,9 +61,9 @@ export const VotingProvider = ({ children }) => {
       url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
       data: data,
       headers: {
-        pinata_api_key: "a82fe6fb8d74e65ebc84",
+        pinata_api_key: "645d290eab26b027fc12",
         pinata_secret_api_key:
-          "7ff5a45db9a4c5ffbbf70104a83cb4ad5a06517b581e4b452430e63ecc5ff3f3",
+          "c3ccd323a576c8c57949b35dca1190036b4b361fec7764e51d656040787c868d",
         "Content-Type": "multipart/form-data",
       },
     });
